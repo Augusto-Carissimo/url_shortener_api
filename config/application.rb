@@ -18,5 +18,9 @@ module UrlShortenerApi
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    config.api_only = true
+    config.middleware.delete ActionDispatch::Flash
+    config.middleware.delete ActionDispatch::Cookies
+    config.middleware.delete ActionView::Rendering
   end
 end
