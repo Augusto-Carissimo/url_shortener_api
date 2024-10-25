@@ -1,24 +1,11 @@
-# README
-
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Tasks:
+- Link model unit test and validations
+- Link controller unit test
+- root links/shortener
+- mock shortener method with random string
+- shortener endpoint logic get/post redirect
+- update shortener algorithm
+- update Link controller unit test
+- links/top100
+- background job crawler
+- update README
