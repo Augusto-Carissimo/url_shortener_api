@@ -45,6 +45,14 @@ RSpec.describe LinksController, type: :request do
       get root_path, params: { key: shorten_url }
       expect(response).to redirect_to new_url
     end
+
+    it 'adds 1 to count when redirect to url' do
+      get root_path, params: { key: new_url }
+      shorten_url = JSON.parse(response.body).deep_symbolize_keys[:shorten_url]
+      link = Link.find_by(url: new_url)
+      get root_path, params: { key: shorten_url }
+      expect(link.reload.count).to eq(2)
+    end
   end
 
   describe "GET /links/top100" do

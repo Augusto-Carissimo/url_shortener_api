@@ -6,6 +6,7 @@ class LinksController < ApplicationController
     return render json: { not_acceptable: 'Please add an url or shorten url' }, status: 406 unless params[:key].present?
 
     if is_shorten_url?
+      decoded_link.increment!(:count, 1)
       return redirect_to decoded_link.url, allow_other_host: true
     end
 
