@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
-  get '/*url', to: 'links#index'
-  root to: 'links#index'
+  get '/*key', to: 'links#shortener'
+  root to: 'links#shortener'
 end
