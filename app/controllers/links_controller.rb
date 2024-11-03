@@ -24,6 +24,11 @@ class LinksController < ApplicationController
     render json: { error_messege: "Error: try adding '?key=' before url" }, status: 400
   end
 
+  def top100
+    @links = Link.all.map(&:url)
+    render json: { top100: @links }, status: 200
+  end
+
   private
 
   def is_shorten_url?
