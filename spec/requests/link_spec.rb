@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require 'base64'
 
 RSpec.describe LinksController, type: :request do
   let!(:exisiting_url) { FactoryBot.create(:link) }
   let!(:shorten_existing_url) { Shortener.bijective_encode(exisiting_url.id) }
+  let!(:new_url) { "https://example.com/" }
 
   describe "GET /:url" do
     it 'returns stored url' do
@@ -15,7 +15,7 @@ RSpec.describe LinksController, type: :request do
     end
 
     it 'creates a new link if it does not exist' do
-      new_url = "https://example.com/"
+
       expect {
         get root_path, params: { key: new_url }
       }.to change(Link, :count).by(1)
@@ -37,6 +37,14 @@ RSpec.describe LinksController, type: :request do
       get root_path
       expect(response).to have_http_status(:not_acceptable)
       expect(JSON.parse(response.body)['not_acceptable']).to eq('Please add an url or shorten url')
+    end
+
+    it 'redirects to url when shorter url as param' do
+      get root_path, params: { key: new_url }
+      shorten_url = JSON.parse(response.body).deep_symbolize_keys[:shorten_url]
+      get root_path, params: { key: shorten_url }
+      expect(response).to redirect_to new_url
+
     end
   end
 end
