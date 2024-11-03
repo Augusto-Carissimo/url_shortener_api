@@ -63,7 +63,12 @@ RSpec.describe LinksController, type: :request do
     it 'returns urls from Top100 in order of count' do
       get top100_path
       top100 = JSON.parse(response.body).deep_symbolize_keys[:top100]
-      expect(top100).to eq([url_count_3.url, url_count_2.url, url_count_1.url])
+      expect(top100).to eq([
+        {:title => url_count_3.title, :url => url_count_3.url},
+        {:title => url_count_2.title, :url => url_count_2.url},
+        {:title => url_count_1.title, :url => url_count_1.url},
+
+      ])
     end
   end
 end

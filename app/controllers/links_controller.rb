@@ -26,7 +26,7 @@ class LinksController < ApplicationController
   end
 
   def top100
-    @links = Link.all.order(count: :desc).map(&:url)
+    @links = Link.all.order(count: :desc).map { |link| link.slice(:title, :url) }
     render json: { top100: @links }, status: 200
   end
 
