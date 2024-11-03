@@ -44,7 +44,13 @@ RSpec.describe LinksController, type: :request do
       shorten_url = JSON.parse(response.body).deep_symbolize_keys[:shorten_url]
       get root_path, params: { key: shorten_url }
       expect(response).to redirect_to new_url
-
     end
+
+    it 'returns urls from Top100' do
+      get top100_path
+      top100 = JSON.parse(response.body).deep_symbolize_keys[:top100]
+      expect(top100).to eq([exisiting_url.url])
+    end
+
   end
 end
