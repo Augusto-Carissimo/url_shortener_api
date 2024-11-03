@@ -3,11 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe LinksController, type: :request do
-  let!(:exisiting_url) { FactoryBot.create(:link) }
-  let!(:shorten_existing_url) { Shortener.bijective_encode(exisiting_url.id) }
-  let!(:new_url) { "https://example.com/" }
-
   describe "GET /:url" do
+    let!(:exisiting_url) { FactoryBot.create(:link) }
+    let!(:shorten_existing_url) { Shortener.bijective_encode(exisiting_url.id) }
+    let!(:new_url) { "https://example.com/" }
+
     it 'returns stored url' do
       get root_path, params: { key: exisiting_url.url }
       expect(response).to have_http_status(:ok)
@@ -45,12 +45,17 @@ RSpec.describe LinksController, type: :request do
       get root_path, params: { key: shorten_url }
       expect(response).to redirect_to new_url
     end
+  end
 
-    it 'returns urls from Top100' do
+  describe "GET /links/top100" do
+    let!(:url_count_1) { FactoryBot.create(:link) }
+    let!(:url_count_2) { FactoryBot.create(:link, count: 2) }
+    let!(:url_count_3) { FactoryBot.create(:link, count: 3) }
+
+    it 'returns urls from Top100 in order of count' do
       get top100_path
       top100 = JSON.parse(response.body).deep_symbolize_keys[:top100]
-      expect(top100).to eq([exisiting_url.url])
+      expect(top100).to eq([url_count_3.url, url_count_2.url, url_count_1.url])
     end
-
   end
 end
