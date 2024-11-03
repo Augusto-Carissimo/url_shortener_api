@@ -11,11 +11,13 @@ class LinksController < ApplicationController
     end
 
     if url_stored
+      UrlCrawlerJob.perform_later(params[:key]) unless url_stored.title
       return render json: { shorten_url: encode_id(url_stored.id) }, status: 200
     end
 
     if is_url_active?(params[:key])
       new_link = Link.create(url: params[:key])
+      UrlCrawlerJob.perform_later(params[:key])
       render json: { shorten_url: encode_id(new_link.id) }, status: 201
     else
       render json: { error_messege: 'URL is not active' }, status: 404
