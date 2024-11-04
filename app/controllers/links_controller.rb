@@ -3,7 +3,7 @@ require 'uri'
 
 class LinksController < ApplicationController
   def shortener
-    return render json: { not_acceptable: 'Please add an url or shorten url' }, status: 406 unless params[:key].present?
+    return render json: { welcome: "Please add an URL with the prefix '?key=' or shorten URL" }, status: 406 unless params[:key].present?
 
     if is_shorten_url?
       decoded_link.increment!(:count, 1)
@@ -24,7 +24,7 @@ class LinksController < ApplicationController
     end
 
   rescue StandardError
-    render json: { error_messege: "Error: try adding '?key=' before url" }, status: 400
+    render json: { error_messege: "Error: try adding '?key=' before URL" }, status: 400
   end
 
   def top100

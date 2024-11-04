@@ -36,7 +36,7 @@ RSpec.describe LinksController, type: :request do
     it 'handles empty params' do
       get root_path
       expect(response).to have_http_status(:not_acceptable)
-      expect(JSON.parse(response.body)['not_acceptable']).to eq('Please add an url or shorten url')
+      expect(JSON.parse(response.body)['welcome']).to eq("Please add an url with the prefix '?key=' or shorten url")
     end
 
     it 'redirects to url when shorter url as param' do
