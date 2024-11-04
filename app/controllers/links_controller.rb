@@ -6,6 +6,7 @@ class LinksController < ApplicationController
     return render json: { welcome: "Please add an URL with the prefix '?key=' or shorten URL" }, status: 406 unless params[:key].present?
 
     if is_shorten_url?
+      Rails.logger.info 'Checking db for URL'
       decoded_link.increment!(:count, 1)
       return redirect_to decoded_link.url, allow_other_host: true
     end
@@ -24,7 +25,7 @@ class LinksController < ApplicationController
     end
 
   rescue StandardError
-    render json: { error_messege: "Error: try adding '?key=' before URL" }, status: 400
+    render json: { error_messege: "Error: try adding '?key=' before URL and full path" }, status: 400
   end
 
   def top100
@@ -35,22 +36,27 @@ class LinksController < ApplicationController
   private
 
   def is_shorten_url?
+    Rails.logger.info 'Checking if is shorten URL'
     Link.find_by(id: Shortener.bijective_decode(params[:key]))
   end
 
   def url_stored
+    Rails.logger.info 'Checking db for URL'
     Link.find_by(url: params[:key])
   end
 
   def decoded_link
+     Rails.logger.info 'Decoding shorten URL'
     Link.find_by(id: Shortener.bijective_decode(params[:key]))
   end
 
   def encode_id(id)
+     Rails.logger.info 'Encoding into shorten URL'
     Shortener.bijective_encode(id)
   end
 
   def is_url_active?(url_string)
+    Rails.logger.info 'Checking if URL is active'
     url = URI.parse(url_string)
     req = Net::HTTP.new(url.host, url.port)
     req.use_ssl = (url.scheme == 'https')
